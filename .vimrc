@@ -1,30 +1,16 @@
 set nocompatible
 filetype off
 
-set rtp+=~/.vim/bundle/Vundle.vim
-execute pathogen#infect()
-
-call vundle#begin()
-Plugin 'VundleVim/Vundle.vim'
-Plugin 'vim-airline/vim-airline'
-Plugin 'vim-airline/vim-airline-themes'
-Plugin 'rust-lang/rust.vim'
-Plugin 'sophacles/vim-processing'
-"Plugin 'bazelbuild/vim-bazel'
-"Plugin 'google/vim-maktaba'
-"Plugin 'google/vim-codefmt'
-"Plugin 'google/vim-codereview'
-"Plugin 'Valloric/YouCompleteMe'
-call vundle#end()
+"execute pathogen#infect()
 
 augroup autoformat_settings
-  autocmd FileType bzl AutoFormatBuffer buildifier
-  autocmd FileType c,cpp,proto,javascript AutoFormatBuffer clang-format
-  autocmd FileType dart AutoFormatBuffer dartfmt
-  autocmd FileType go AutoFormatBuffer gofmt
-  autocmd FileType gn AutoFormatBuffer gn
-  autocmd FileType html,css,json AutoFormatBuffer js-beautify
-  autocmd FileType java AutoFormatBuffer google-java-format
+  "autocmd FileType bzl AutoFormatBuffer buildifier
+  " autocmd FileType c,cpp,proto,javascript AutoFormatBuffer clang-format
+  "autocmd FileType dart AutoFormatBuffer dartfmt
+  " autocmd FileType go AutoFormatBuffer gofmt
+  "autocmd FileType gn AutoFormatBuffer gn
+  " autocmd FileType html,css,json AutoFormatBuffer js-beautify
+  "autocmd FileType java AutoFormatBuffer google-java-format
   " autocmd FileType python AutoFormatBuffer yapf
   " Alternative: autocmd FileType python AutoFormatBuffer autopep8
 augroup END
@@ -32,55 +18,70 @@ augroup END
 filetype plugin on
 set omnifunc=syntaxcomplete#Complete
 set pastetoggle=<F3>
+"map <F4> :MerlinTypeOf<CR>
 
 autocmd Filetype python setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2 nosmartindent
 
-"let g:ycm_global_ycm_extra_conf = '~/.vim/bundle/YouCompleteMe/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py'
+if bufwinnr(1)
+  map + <C-W>+
+  map - <C-W>-
+endif
 
+"let g:ycm_global_ycm_extra_conf = '~/.vim/bundle/YouCompleteMe/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py'
+"let g:opamshare = substitute(system('opam config var share'),'\n$','','''')
+"execute "set rtp+=" . g:opamshare . "/merlin/vim"
 
 " Protobuf {{{
 augroup filetype
-  au! BufRead,BufNewFile *.proto setfiletype proto
+  " au! BufRead,BufNewFile *.proto setfiletype proto
 augroup end
 " }}}
 
 " HVN paths {{{
 " Set XDG_CONFIG_HOME/haskell-vim-now to load user's config files
-if exists($XDG_CONFIG_HOME)
-  let hvn_config_dir = $XDG_CONFIG_HOME . "/haskell-vim-now"
-else
-  let hvn_config_dir = $HOME . "/.config/haskell-vim-now"
-endif
+"if exists($XDG_CONFIG_HOME)
+"  let hvn_config_dir = $XDG_CONFIG_HOME . "/haskell-vim-now"
+"else
+"  let hvn_config_dir = $HOME . "/.config/haskell-vim-now"
+"endif
 
 " Haskell Vim Now paths
 " haskell config path
-let hvn_config_haskell = expand(resolve(hvn_config_dir . "/vimrc.haskell"))
-" pre config path
-let hvn_config_pre = expand(resolve(hvn_config_dir . "/vimrc.local.pre"))
+"let hvn_config_haskell = expand(resolve(hvn_config_dir . "/vimrc.haskell"))
+"" pre config path
+"let hvn_config_pre = expand(resolve(hvn_config_dir . "/vimrc.local.pre"))
 " post config path
-let hvn_config_post = expand(resolve(hvn_config_dir . "/vimrc.local"))
+"let hvn_config_post = expand(resolve(hvn_config_dir . "/vimrc.local"))
 " user plugins config path
-let hvn_user_plugins = expand(resolve(hvn_config_dir . "/plugins.vim"))
+"let hvn_user_plugins = expand(resolve(hvn_config_dir . "/plugins.vim"))
 " }}}
 
 " recustomization {{{
-if filereadable(hvn_config_pre)
-  execute 'source '. hvn_config_pre
-endif
+"if filereadable(hvn_config_pre)
+"  execute 'source '. hvn_config_pre
+"endif
 " }}}
+
+" save folds
+augroup AutoSaveFolds
+  silent autocmd!
+  silent autocmd BufWinLeave ?* silent mkview
+  silent autocmd BufWinEnter ?* silent loadview
+augroup END
 
 " General {{{
 " Use indentation for folds
-set foldmethod=manual
+set foldmethod=syntax
 "set foldnestmax=5
-"set foldlevelstart=99
-"set foldcolumn=0
+set foldlevelstart=99
+set foldcolumn=0
 
 augroup vimrcFold
   " fold vimrc itself by categories
   autocmd!
   autocmd FileType vim set foldmethod=marker
   autocmd FileType vim set foldlevel=0
+  autocmd Filetype go set foldmethod=syntax foldlevelstart=99 foldcolumn=0
 augroup END
 
 " Sets how many lines of history VIM has to remember
@@ -123,12 +124,13 @@ endif
 
 set nocompatible
 
-if has('nvim')
-  call plug#begin('~/.config/nvim/bundle')
-else
-  call plug#begin('~/.vim/bundle')
-endif
+"if has('nvim')
+"  call plug#begin('~/.config/nvim/bundle')
+"else
+"  call plug#begin('~/.vim/bundle')
+"endif
 
+call plug#begin()
 " Support bundles
 Plug 'jgdavey/tslime.vim'
 Plug 'Shougo/vimproc.vim', { 'do': 'make' }
@@ -144,7 +146,7 @@ Plug 'int3/vim-extradite'
 
 " Bars, panels, and files
 Plug 'scrooloose/nerdtree'
-"Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'majutsushi/tagbar'
 
@@ -161,21 +163,33 @@ Plug 'ConradIrwin/vim-bracketed-paste'
 Plug 'christoomey/vim-tmux-navigator'
 
 " Haskell
-Plug 'neovimhaskell/haskell-vim', { 'for': 'haskell' }
-Plug 'enomsg/vim-haskellConcealPlus', { 'for': 'haskell' }
-Plug 'eagletmt/ghcmod-vim', { 'for': 'haskell' }
-Plug 'eagletmt/neco-ghc', { 'for': 'haskell' }
-Plug 'Twinside/vim-hoogle', { 'for': 'haskell' }
-Plug 'mpickering/hlint-refactor-vim', { 'for': 'haskell' }
+"Plug 'neovimhaskell/haskell-vim', { 'for': 'haskell' }
+"Plug 'enomsg/vim-haskellConcealPlus', { 'for': 'haskell' }
+"Plug 'eagletmt/ghcmod-vim', { 'for': 'haskell' }
+"Plug 'eagletmt/neco-ghc', { 'for': 'haskell' }
+"Plug 'Twinside/vim-hoogle', { 'for': 'haskell' }
+"Plug 'mpickering/hlint-refactor-vim', { 'for': 'haskell' }
 
 " Colorscheme
 Plug 'vim-scripts/wombat256.vim'
 
 " Custom bundles
+Plug 'VundleVim/Vundle.vim'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'rust-lang/rust.vim'
+Plug 'sophacles/vim-processing'
+"Plug 'bazelbuild/vim-bazel'
+"Plug 'google/vim-maktaba'
+"Plug 'google/vim-codefmt'
+"Plug 'google/vim-codereview'
+"Plug 'Valloric/YouCompleteMe'
+Plug 'leafgarland/typescript-vim'
+" Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 
-if filereadable(hvn_user_plugins)
-  execute 'source '. hvn_user_plugins
-endif
+"if filereadable(hvn_user_plugins)
+"  execute 'source '. hvn_user_plugins
+"endif
 
 call plug#end()
 
@@ -610,17 +624,39 @@ set completeopt+=longest
 let g:SuperTabDefaultCompletionType = '<c-x><c-p>'
 let g:syntastic_cpp_compiler = 'g++'
 let g:syntastic_cpp_compiler_options = ' -std=c++11'
+let g:syntastic_ocaml_checkers = ['merlin']
 " }}}
 
 
 " Customization {{{
-execute 'source '. hvn_config_haskell
-if filereadable(hvn_config_post)
-  execute 'source '. hvn_config_post
-endif
+"execute 'source '. hvn_config_haskell
+"if filereadable(hvn_config_post)
+"  execute 'source '. hvn_config_post
+"endif
 
 " }}}
 "
 "
+map <C-n> :NERDTreeToggle<CR>
+nmap <C-m> :TagbarToggle<CR>
+
+" start nerdtree if vim is opened with no files as argument
+autocmd StdinReadPre * let s:std_in=1
+autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+
+" Nerdtree git plugin symbols
+let g:NERDTreeIndicatorMapCustom = {
+    \ "Modified"  : "ᵐ",
+    \ "Staged"    : "ˢ",
+    \ "Untracked" : "ᵘ",
+    \ "Renamed"   : "ʳ",
+    \ "Unmerged"  : "ᶴ",
+    \ "Deleted"   : "ˣ",
+    \ "Dirty"     : "˜",
+    \ "Clean"     : "ᵅ",
+    \ "Unknown"   : "?"
+    \ }
 
 let nim_highlight_space_errors = 0
+let g:go_doc_keywordprg_enabled = 1
+let g:go_auto_type_info = 1
