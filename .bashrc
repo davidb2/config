@@ -96,6 +96,9 @@ alias l='ls -CF'
 #   sleep 10; alert
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 
+# spotify alias
+alias spotify='spotify --enable-font-antialiasing --force-device-scale-factor=2 &> /dev/null'
+
 cdm() {
   mkdir -p "$1" && cd "$1"
 }
@@ -136,17 +139,20 @@ if [ -f /usr/share/powerline/bindings/bash/powerline.sh ]; then
     source /usr/share/powerline/bindings/bash/powerline.sh
 fi
 
-export PATH="~/.local/bin:$PATH"
+export GOPATH="/home/david/go/packages"
+export GOBIN="$GOPATH/bin"
 export PROMPT_DIRTRIM=1
+export PATH="~/.local/bin:$PATH"
 export PATH="~/.cargo/bin:$PATH"
 export PATH="~/processing-3.3.5:$PATH"
 export PATH="/home/david/FStar/bin:$PATH"
 export PATH="/home/david/.nimble/bin:$PATH"
 export PATH="/home/david/nim-0.17.2/bin:$PATH"
-export GOPATH="$HOME/go"
-export PATH="$GOROOT/bin:$GOPATH/bin:$PATH"
+export PATH="$GOBIN:$PATH"
+export PATH="/usr/lib/go-1.10/bin:$PATH"
 SHAREUSER="davidb2"
 
 if command -v tmux>/dev/null; then
   [[ ! $TERM =~ screen ]] && [ -z $TMUX ] && exec tmux
 fi
+zsh
