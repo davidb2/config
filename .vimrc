@@ -19,7 +19,7 @@ Plug 'ervandew/supertab'
 " Bars, panels, and files
 Plug 'scrooloose/nerdtree'
 Plug 'vim-airline/vim-airline'
-Plug 'majutsushi/tagbar'
+" Plug 'majutsushi/tagbar'
 " Plug 'ctrlpvim/ctrlp.vim'
 
 " Text manipulation
@@ -80,12 +80,12 @@ set pastetoggle=<F4>
 set foldmethod=syntax
 set foldlevelstart=99
 set foldcolumn=0
-augroup AutoSaveFolds
-  silent autocmd!
-  silent autocmd BufWinLeave ?* silent mkview
-  silent autocmd BufWinEnter ?* silent loadview | AirlineRefresh
-  silent autocmd BufWinEnter ?* source $MYVIMRC | AirlineRefresh
-augroup END
+" augroup AutoSaveFolds
+"   silent autocmd!
+"   silent autocmd BufWinLeave ?* silent mkview
+"   silent autocmd BufWinEnter ?* silent loadview | AirlineRefresh
+"   silent autocmd BufWinEnter ?* source $MYVIMRC | AirlineRefresh
+" augroup END
 augroup vimrcFold
   autocmd!
   autocmd FileType vim set foldmethod=marker foldlevelstart=99
@@ -149,22 +149,6 @@ highlight CursorLine cterm=bold ctermbg=233
 " set whichwrap+=<,>,h,l
 " }}}
 
-
-" Use powerline fonts for airline
-" if !exists('g:airline_symbols')
-"   let g:airline_symbols = {}
-" endif
-
-" let g:airline_powerline_fonts = 1
-" let g:airline_symbols.space = "\ua0"
-
-" Files, backups and undo {{{
-
-" Turn backup off, since most stuff is in Git anyway...
-" set nobackup
-" set nowb
-" set noswapfile
-
 " Source the vimrc file after saving it
 augroup sourcing
   autocmd!
@@ -176,14 +160,6 @@ nmap <leader>e :e <C-R>=expand("%:p:h") . '/'<CR>
 
 " Show undo tree
 nmap <silent> <leader>u :MundoToggle<CR>
-
-" Fuzzy find files
-" nnoremap <silent> <Leader><space> :CtrlP<CR>
-" let g:ctrlp_max_files=0
-" let g:ctrlp_show_hidden=1
-" let g:ctrlp_custom_ignore = { 'dir': '\v[\/](.git|.cabal-sandbox|.stack-work)$' }
-
-" }}}
 
 " Text, tab and indent related {{{
 set encoding=utf8
@@ -323,8 +299,8 @@ map <C-n> :NERDTreeToggle<CR>
 nmap <C-m> :TagbarOpenAutoClose<CR>
 
 " start nerdtree if vim is opened with no files as argument
-autocmd StdinReadPre * let s:std_in=1
-autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+" autocmd StdinReadPre * let s:std_in=1
+" autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 
 " Nerdtree git plugin symbols
 let g:NERDTreeIndicatorMapCustom = {
@@ -367,6 +343,9 @@ let g:tagbar_type_go = {
   \ 'ctagsargs' : '-sort -silent'
 \ }
 
+
+let g:SuperTabMappingForward = '<s-tab>'
+let g:SuperTabMappingBackward = '<tab>'
 
 autocmd Filetype python setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2 nosmartindent
 autocmd Filetype go setlocal noexpandtab tabstop=8 shiftwidth=2
