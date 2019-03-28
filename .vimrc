@@ -5,6 +5,10 @@ filetype off
 call plug#begin()
 " Support bundles
 Plug 'ervandew/supertab'
+Plug 'let-def/ocp-indent-vim'
+Plug 'Rip-Rip/clang_complete'
+" Plug 'scrooloose/syntastic'
+Plug 'tpope/vim-abolish'
 " Plug 'jgdavey/tslime.vim'
 " Plug 'Shougo/vimproc.vim', { 'do': 'make' }
 " Plug 'benekastah/neomake'
@@ -13,16 +17,19 @@ Plug 'ervandew/supertab'
 " Plug 'vim-scripts/gitignore'
 
 " Git
-" Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-fugitive'
+Plug 'airblade/vim-gitgutter'
 " Plug 'int3/vim-extradite'
 
 " Bars, panels, and files
 Plug 'scrooloose/nerdtree'
 Plug 'vim-airline/vim-airline'
+Plug 'jpalardy/vim-slime'
 " Plug 'majutsushi/tagbar'
 " Plug 'ctrlpvim/ctrlp.vim'
 
 " Text manipulation
+Plug 'ntpeters/vim-better-whitespace'
 " Plug 'vim-scripts/Align'
 " Plug 'tpope/vim-commentary'
 " Plug 'godlygeek/tabular'
@@ -38,15 +45,19 @@ Plug 'vim-airline/vim-airline'
 Plug 'vim-scripts/wombat256.vim'
 
 " Custom bundles
+" Plug 'davidhalter/jedi-vim'
 " Plug 'vim-airline/vim-airline-themes'
 Plug 'sethwklein/vim-go-fmt-on-save'
-Plug 'zah/nim.vim'
-Plug 'hashivim/vim-terraform'
-" Plug 'rust-lang/rust.vim'
+Plug 'racer-rust/vim-racer'
+" Plug 'junegunn/goyo.vim'
+Plug 'junegunn/limelight.vim'
+" Plug 'zah/nim.vim'
+" Plug 'hashivim/vim-terraform'
+Plug 'rust-lang/rust.vim'
 " Plug 'sophacles/vim-processing'
 " Plug 'leafgarland/typescript-vim'
-" Plug 'bazelbuild/vim-bazel'
-" Plug 'google/vim-maktaba'
+Plug 'bazelbuild/vim-bazel'
+Plug 'google/vim-maktaba'
 " Plug 'google/vim-codefmt'
 " Plug 'google/vim-codereview'
 " Plug 'Valloric/YouCompleteMe'
@@ -75,6 +86,7 @@ filetype plugin indent on
 
 set omnifunc=syntaxcomplete#Complete
 set pastetoggle=<F4>
+nnoremap <silent> <F2> :noh<CR>
 
 " Fold Settings {{{
 set foldmethod=syntax
@@ -103,6 +115,7 @@ set history=700
 set autoread
 set formatprg=par
 let $PARINIT = 'rTbgqR B=.,?_A_a Q=_s>|'
+set updatetime=1000
 " }}}
 
 " Mappings {{{
@@ -145,6 +158,7 @@ set background=dark
 set cursorline
 set encoding=utf8
 set ffs=unix,dos,mac
+set colorcolumn=80
 highlight CursorLine cterm=bold ctermbg=233
 " set whichwrap+=<,>,h,l
 " }}}
@@ -166,7 +180,7 @@ set encoding=utf8
 set shiftwidth=2
 set softtabstop=2
 set tabstop=2
-set noeol
+set eol
 set binary
 set expandtab
 set list
@@ -175,14 +189,23 @@ set lbr
 set tw=500
 set ai
 set si
+highlight ExtraWhitespace ctermbg=red
+" match ExtraWhitespace /\s\+$/
 " }}}
 
 " Visual mode related {{{
-vnoremap <silent> * :call VisualSelection('f', '')<CR>
-vnoremap <silent> # :call VisualSelection('b', '')<CR>
+" vnoremap <silent> * :call VisualSelection('f', '')<CR>
+" vnoremap <silent> # :call VisualSelection('b', '')<CR>
 " }}}
+"
+set splitright
+set splitbelow
+
+nnoremap * #<c-o>
+nnoremap # *<c-o>
 
 " Moving around, tabs, windows and buffers {{{
+nnoremap <c-i> <c-a>
 nnoremap j gj
 nnoremap k gk
 noremap <c-h> <c-w>h
@@ -298,6 +321,11 @@ set completeopt+=longest
 map <C-n> :NERDTreeToggle<CR>
 nmap <C-m> :TagbarOpenAutoClose<CR>
 
+map <F3> :StripWhitespace<CR>
+
+inoremap <tab> <C-x><C-o>
+inoremap <s-tab> <C-x><C-p>
+
 " start nerdtree if vim is opened with no files as argument
 " autocmd StdinReadPre * let s:std_in=1
 " autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
@@ -343,9 +371,34 @@ let g:tagbar_type_go = {
   \ 'ctagsargs' : '-sort -silent'
 \ }
 
+highlight GitGutterAdd ctermfg=2
+highlight GitGutterChange ctermfg=3
+highlight GitGutterDelete ctermfg=1
 
-let g:SuperTabMappingForward = '<s-tab>'
-let g:SuperTabMappingBackward = '<tab>'
+let g:SuperTabDefaultCompletionType = '<c-p>'
+let g:SuperTabMappingForward = '<tab>'
+let g:SuperTabMappingBackward = '<s-tab>'
+
+let g:limelight_conceal_ctermfg = 'gray'
+let g:limelight_conceal_ctermfg = 240
+
+set hidden
+let g:racer_cmd = "/home/david/.cargo/bin/racer"
+let g:racer_experimental_completer = 1
+
+" merlin
+let g:opamshare=substitute(system('opam config var share'),'\n$','','''')
+execute "set rtp+=" . g:opamshare . "/merlin/vim"
+execute "set rtp+=" . g:opamshare . "/ocp-indent/vim"
+let g:syntastic_ocaml_checkers = ['merlin']
+
+let g:slime_target = "tmux"
+let g:clang_library_path='/usr/lib/llvm-3.8/lib/libclang.so.1'
+
+au FileType rust nmap gd <Plug>(rust-def)
+au FileType rust nmap gs <Plug>(rust-def-split)
+au FileType rust nmap gx <Plug>(rust-def-vertical)
+au FileType rust nmap <leader>gd <Plug>(rust-doc)
 
 autocmd Filetype python setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2 nosmartindent
-autocmd Filetype go setlocal noexpandtab tabstop=8 shiftwidth=2
+autocmd Filetype go setlocal noexpandtab tabstop=8 shiftwidth=8 softtabstop=7

@@ -9,7 +9,12 @@ export ZSH="/home/david/.oh-my-zsh"
 # Set name of the theme to load. Optionally, if you set this to "random"
 # it'll load a random theme each time that oh-my-zsh is loaded.
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
-ZSH_THEME="robbyrussell"
+# ZSH_THEME="robbyrussell"
+# josh
+# miloshadzic
+# fino
+# duellj
+ZSH_THEME="fino"
 
 # Set list of themes to load
 # Setting this variable when ZSH_THEME=random
@@ -99,11 +104,16 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-eval $(thefuck --alias)
+alias rm="rm -i"
+alias 'ipython3.6'='python3.6 -m IPython'
+alias 'intellij'='bash ~/idea-IC-172.4343.14/bin/idea.sh'
+alias spotify='spotify --enable-font-antialiasing --force-device-scale-factor=2 &> /dev/null'
+# eval $(thefuck --alias)
 # export TERM=xterm-256color
 export TERM=screen-256color
 export GOPATH="/home/david/go/packages"
 export GOBIN="$GOPATH/bin"
+# export RUST_SRC_PATH="$(rustc --print sysroot)/lib/rustlib/src/rust/src"
 export PROMPT_DIRTRIM=1
 export PATH="~/.local/bin:$PATH"
 export PATH="~/.cargo/bin:$PATH"
@@ -113,8 +123,29 @@ export PATH="/home/david/.nimble/bin:$PATH"
 export PATH="/home/david/nim-0.17.2/bin:$PATH"
 export PATH="$GOBIN:$PATH"
 export PATH="/usr/lib/go-1.10/bin:$PATH"
+export PATH="~/bin:$PATH"
+
+# disable tensorflow warnings
+export TF_CPP_MIN_LOG_LEVEL=2
+eval $(opam config env)
+
 source ~/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 setopt no_share_history
 if command -v tmux>/dev/null; then
   [[ ! $TERM =~ screen ]] && [ -z $TMUX ] && exec tmux
 fi
+
+# True color test.
+awk 'BEGIN{
+    s="/\\/\\/\\/\\/\\"; s=s s s s s s s s;
+    for (colnum = 0; colnum<77; colnum++) {
+        r = 255-(colnum*255/76);
+        g = (colnum*510/76);
+        b = (colnum*255/76);
+        if (g>255) g = 510-g;
+        printf "\033[48;2;%d;%d;%dm", r,g,b;
+        printf "\033[38;2;%d;%d;%dm", 255-r,255-g,255-b;
+        printf "%s\033[0m", substr(s,colnum+1,1);
+    }
+    printf "\n";
+}'
