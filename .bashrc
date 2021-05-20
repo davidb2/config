@@ -152,7 +152,7 @@ export PATH="$GOBIN:$PATH"
 export PATH="/usr/lib/go-1.10/bin:$PATH"
 SHAREUSER="davidb2"
 
-if command -v tmux>/dev/null; then
-  [[ ! $TERM =~ screen ]] && [ -z $TMUX ] && exec tmux
-fi
-zsh
+# if command -v tmux>/dev/null; then
+#   [[ ! $TERM =~ screen ]] && [ -z $TMUX ] && exec tmux -u new-session -s playground
+# fi
+exec zsh

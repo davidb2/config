@@ -1,40 +1,48 @@
 # If you come from bash you might have to change your $PATH.
-# export PATH=$HOME/bin:/usr/local/bin:$PATH
-
-ZSH_TMUX_AUTOSTART="true"
+export PATH="$HOME/bin:/usr/local/bin:$PATH"
+export PATH="$HOME/.local/bin:$PATH"
+export PATH="/root/.local/bin:$PATH"
+export PATH="/usr/local/texlive/2020/bin/x86_64-linux:$PATH"
+export PATH="$HOME/software/anyconnect-linux64-4.9.00086/vpn:$PATH"
+export PATH="/opt/ObinsKit:$PATH"
+export PATH="/opt/piavpn/bin:$PATH"
+export MANPATH="/usr/local/texlive/2020/texmf-dist/doc/man:$MANPATH"
+export INFOPATH="/usr/local/texlive/2020/texmf-dist/doc/info:$INFOPATH"
 
 # Path to your oh-my-zsh installation.
 export ZSH="/home/david/.oh-my-zsh"
+export SAGE_ROOT="/home/david/software/SageMath"
 
-# Set name of the theme to load. Optionally, if you set this to "random"
-# it'll load a random theme each time that oh-my-zsh is loaded.
-# See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
-# ZSH_THEME="robbyrussell"
-# josh
-# miloshadzic
-# fino
-# duellj
+# Set name of the theme to load --- if set to "random", it will
+# load a random theme each time oh-my-zsh is loaded, in which case,
+# to know which specific one was loaded, run: echo $RANDOM_THEME
+# See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
 ZSH_THEME="fino"
 
-# Set list of themes to load
-# Setting this variable when ZSH_THEME=random
-# cause zsh load theme from this variable instead of
-# looking in ~/.oh-my-zsh/themes/
-# An empty array have no effect
+# Set list of themes to pick from when loading at random
+# Setting this variable when ZSH_THEME=random will cause zsh to load
+# a theme from this variable instead of looking in $ZSH/themes/
+# If set to an empty array, this variable will have no effect.
 # ZSH_THEME_RANDOM_CANDIDATES=( "robbyrussell" "agnoster" )
 
 # Uncomment the following line to use case-sensitive completion.
 CASE_SENSITIVE="true"
 
-# Uncomment the following line to use hyphen-insensitive completion. Case
-# sensitive completion must be off. _ and - will be interchangeable.
+# Uncomment the following line to use hyphen-insensitive completion.
+# Case-sensitive completion must be off. _ and - will be interchangeable.
 # HYPHEN_INSENSITIVE="true"
 
 # Uncomment the following line to disable bi-weekly auto-update checks.
 # DISABLE_AUTO_UPDATE="true"
 
+# Uncomment the following line to automatically update without prompting.
+# DISABLE_UPDATE_PROMPT="true"
+
 # Uncomment the following line to change how often to auto-update (in days).
 # export UPDATE_ZSH_DAYS=13
+
+# Uncomment the following line if pasting URLs and other text is messed up.
+# DISABLE_MAGIC_FUNCTIONS="true"
 
 # Uncomment the following line to disable colors in ls.
 # DISABLE_LS_COLORS="true"
@@ -46,7 +54,7 @@ CASE_SENSITIVE="true"
 # ENABLE_CORRECTION="true"
 
 # Uncomment the following line to display red dots whilst waiting for completion.
-COMPLETION_WAITING_DOTS="false"
+# COMPLETION_WAITING_DOTS="true"
 
 # Uncomment the following line if you want to disable marking untracked files
 # under VCS as dirty. This makes repository status check for large repositories
@@ -64,17 +72,18 @@ COMPLETION_WAITING_DOTS="false"
 # Would you like to use another custom folder than $ZSH/custom?
 # ZSH_CUSTOM=/path/to/new-custom-folder
 
-# Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
-# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
+# Which plugins would you like to load?
+# Standard plugins can be found in $ZSH/plugins/
+# Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
   git
-  tmux
   vi-mode
 )
 
 source $ZSH/oh-my-zsh.sh
+source ~/playground/configs/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 # User configuration
 
@@ -93,9 +102,6 @@ source $ZSH/oh-my-zsh.sh
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
 
-# ssh
-# export SSH_KEY_PATH="~/.ssh/rsa_id"
-
 # Set personal aliases, overriding those provided by oh-my-zsh libs,
 # plugins, and themes. Aliases can be placed here, though oh-my-zsh
 # users are encouraged to define aliases within the ZSH_CUSTOM folder.
@@ -104,36 +110,21 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-alias rm="rm -i"
-alias 'ipython3.6'='python3.6 -m IPython'
-alias 'intellij'='bash ~/idea-IC-172.4343.14/bin/idea.sh'
-alias spotify='spotify --enable-font-antialiasing --force-device-scale-factor=2 &> /dev/null'
-# eval $(thefuck --alias)
-# export TERM=xterm-256color
-export TERM=screen-256color
-export GOPATH="/home/david/go/packages"
-export GOBIN="$GOPATH/bin"
-# export RUST_SRC_PATH="$(rustc --print sysroot)/lib/rustlib/src/rust/src"
-export PROMPT_DIRTRIM=1
-export PATH="~/.local/bin:$PATH"
-export PATH="~/.cargo/bin:$PATH"
-export PATH="~/processing-3.3.5:$PATH"
-export PATH="/home/david/FStar/bin:$PATH"
-export PATH="/home/david/.nimble/bin:$PATH"
-export PATH="/home/david/nim-0.17.2/bin:$PATH"
-export PATH="$GOBIN:$PATH"
-export PATH="/usr/lib/go-1.10/bin:$PATH"
-export PATH="~/bin:$PATH"
+alias gpoh="git push origin HEAD"
+alias ipython3.8="ipython3 --TerminalInteractiveShell.editing_mode=vi"
 
-# disable tensorflow warnings
-export TF_CPP_MIN_LOG_LEVEL=2
-eval $(opam config env)
-
-source ~/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 setopt no_share_history
+# if command -v tmux>/dev/null; then
+#   [[ ! $TERM =~ screen ]] && [ -z $TMUX ] && exec tmux
+# fi
+
 if command -v tmux>/dev/null; then
-  [[ ! $TERM =~ screen ]] && [ -z $TMUX ] && exec tmux
+  [[ ! $TERM =~ screen ]] && [ -z $TMUX ] && exec tmux -u new-session -A -s playground
 fi
+
+function grayscale() {
+  ( compton --backend glx --glx-fshader-win "$(cat ~/software/compton/grayscale.glsl)" 2&> /dev/null & )
+}
 
 # True color test.
 awk 'BEGIN{
@@ -149,3 +140,12 @@ awk 'BEGIN{
     }
     printf "\n";
 }'
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/home/david/software/google-cloud-sdk/path.zsh.inc' ]; then . '/home/david/software/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/home/david/software/google-cloud-sdk/completion.zsh.inc' ]; then . '/home/david/software/google-cloud-sdk/completion.zsh.inc'; fi
+
+# opam configuration
+test -r /home/david/.opam/opam-init/init.zsh && . /home/david/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
